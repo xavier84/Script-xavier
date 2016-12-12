@@ -68,26 +68,26 @@ if [[ -e /etc/openvpn/server.conf ]]; then
 	while :
 	do
 	clear
-		echo "OpenVPN et déja installer"
+		echo -e "${CGREEN}OpenVPN et déja installer${CEND}"
 		echo ""
-		echo "Que veux tu faire?"
-		echo "   1) Ajouté un nouveaux certificat"
-		echo "   2) Supprimer un certificat"
-		echo "   3) Désinstaller OpenVPN"
-		echo "   4) Sortir"
-		read -p "Choisir une option [1-4]: " option
+		echo -e "${CBLUE}Que veux tu faire?${CEND}"
+		echo -e "${CBLUE}   1) Ajouté un nouveaux certificat${CEND}"
+		echo -e "${CBLUE}   2) Supprimer un certificat${CEND}"
+		echo -e "${CBLUE}   3) Désinstaller OpenVPN${CEND}"
+		echo -e "${CBLUE}   4) Sortir${CEND}"
+		read -p "$(echo -e ${CYELLOW}Choisir une option [1-4]: ${CEND})" option
 		case $option in
 			1)
 			echo ""
-			echo "Entrer un nom pour le certificat"
-			echo "En un seul mot et sans caractères spéciaux"
-			read -p "Nom du certificat: " -e -i client CLIENT
+			echo -e "${CBLUE}Entrer un nom pour le certificat${CEND}"
+			echo -e "${CBLUE}En un seul mot et sans caractères spéciaux${CEND}"
+			read -p "$(echo -e ${CYELLOW}Nom du certificat: ${CEND})" -e -i client CLIENT
 			cd /etc/openvpn/easy-rsa/
 			./easyrsa build-client-full $CLIENT nopass
 			# Generates the custom client.ovpn
 			newclient "$CLIENT"
 			echo ""
-			echo "Certificat $CLIENT crée dans le dossier ~/$CLIENT.ovpn"
+			echo -e "${CBLUE}Certificat $CLIENT crée dans le dossier${CEND} ${CRED}~/$CLIENT.ovpn${CEND}"
 			exit
 			;;
 			2)
@@ -96,16 +96,16 @@ if [[ -e /etc/openvpn/server.conf ]]; then
 			NUMBEROFCLIENTS=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep -c "^V")
 			if [[ "$NUMBEROFCLIENTS" = '0' ]]; then
 				echo ""
-				echo "Tu n'as pas de certificat!"
+				echo -e "${CGREEN}Tu n'as pas de certificat!${CEND}"
 				exit 6
 			fi
 			echo ""
-			echo "Sélectionne le certificat que tu veux révoquer"
+			echo -e "${CBLUE}Sélectionne le certificat que tu veux révoquer${CEND}"
 			tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | nl -s ') '
 			if [[ "$NUMBEROFCLIENTS" = '1' ]]; then
-				read -p "Select one client [1]: " CLIENTNUMBER
+				read -p "$(echo -e ${CYELLOW}Select one client [1]: ${CEND})" CLIENTNUMBER
 			else
-				read -p "Select one client [1-$NUMBEROFCLIENTS]: " CLIENTNUMBER
+				read -p "$(echo -e ${CYELLOW}Select one client [1-$NUMBEROFCLIENTS]: ${CEND})" CLIENTNUMBER
 			fi
 			CLIENT=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | sed -n "$CLIENTNUMBER"p)
 			cd /etc/openvpn/easy-rsa/
@@ -119,12 +119,12 @@ if [[ -e /etc/openvpn/server.conf ]]; then
 			# CRL is read with each client connection, when OpenVPN is dropped to nobody
 			chown nobody:$GROUPNAME /etc/openvpn/crl.pem
 			echo ""
-			echo "Certificat $CLIENT révoqué"
+			echo -e "${CGREEN}Certificat $CLIENT révoqué${CEND}"
 			exit
 			;;
 			3)
 			echo ""
-			read -p "Veux tu vraiment supprimer OpenVPN?[y/n]: " -e -i n REMOVE
+			read -p "$(echo -e ${CRED}Veux tu vraiment supprimer OpenVPN?[y/n]: ${CEND})" -e -i n REMOVE
 			if [[ "$REMOVE" = 'y' ]]; then
 				PORT=$(grep '^port ' /etc/openvpn/server.conf | cut -d " " -f 2)
 				if iptables -L -n | grep -qE 'REJECT|DROP'; then
@@ -137,10 +137,10 @@ if [[ -e /etc/openvpn/server.conf ]]; then
 				rm -rf /etc/openvpn
 				rm -rf /usr/share/doc/openvpn*
 				echo ""
-				echo "OpenVPN supprimée!"
+				echo -e "${CRED}OpenVPN supprimée!${CEND}"
 			else
 				echo ""
-				echo "Aabandon de la désinstallation!"
+				echo -e "${CRED}Aabandon de la désinstallation!${CEND}"
 			fi
 			exit
 			;;
@@ -149,7 +149,7 @@ if [[ -e /etc/openvpn/server.conf ]]; then
 	done
 else
 	clear
-	echo -e "${CBLUE}
+	echo -e "${CGREEN}
                                       |          |_)         _|
             __ \`__ \   _ \  __ \   _\` |  _ \  _\` | |  _ \   |    __|
             |   |   | (   | |   | (   |  __/ (   | |  __/   __| |
@@ -161,22 +161,22 @@ else
          )   / /(__)\  )(   )  (  /(__)\  ) _ < )(_)(  )  (
         (_)\_)(__)(__)(__) (_/\_)(__)(__)(____/(_____)(_/\_)
 		${CEND}"
-	echo "Bienvenue sur installation de OpenVPN"
+	echo -e "${CBLUE}Bienvenue sur installation de OpenVPN${CEND}"
 	echo ""
-	echo "Qu'elle adresse IPv4 veux tu utiliser pour OpenVPN"
+	echo -e "${CBLUE}Qu'elle adresse IPv4 veux tu utiliser pour OpenVPN${CEND}"
 	echo ""
-	read -p "IP addresse: " -e -i $IP IP
+	read -p "$(echo -e ${CYELLOW}IP addresse: ${CEND})" -e -i $IP IP
 	echo ""
-	echo "Qu'elle port pour OpenVPN?"
-	read -p "Port: " -e -i 1194 PORT
+	echo -e "${CBLUE}Qu'elle port pour OpenVPN?${CEND}"
+	read -p "$(echo -e ${CYELLOW}Port: ${CEND})""Port: " -e -i 1194 PORT
 	echo ""
 	echo ""
-	echo "Entrer un nom pour le certificat"
-	echo "En un seul mot et sans caractères spéciaux"
-	read -p "Nom du certificat: " -e -i client CLIENT
+	echo -e "${CBLUE}Entrer un nom pour le certificat${CEND}"
+	echo -e "${CBLUE}En un seul mot et sans caractères spéciaux${CEND}"
+	read -p "$(echo -e ${CYELLOW}Nom du certificat: ${CEND})" -e -i client CLIENT
 	echo ""
-	echo "Ok, c'était tout ce dont j'avais besoin. prêts à installer et configurer votre serveur OpenVPN maintenant"
-	read -n1 -r -p "Appuyez sur n'importe quelle touche pour continuer..."
+	echo -e "${CBLUE}Ok, c'était tout ce dont j'avais besoin. prêts à installer et configurer votre serveur OpenVPN maintenant${CEND}"
+	read -n1 -r -p "$(echo -e ${CYELLOW}Appuyez sur n\'importe quelle touche pour continuer ${CEND})"
 
 	apt-get update
 	apt-get install openvpn iptables openssl ca-certificates -y
@@ -270,11 +270,11 @@ crl-verify crl.pem" >> /etc/openvpn/server.conf
 	EXTERNALIP=$(wget -qO- ipv4.icanhazip.com)
 	if [[ "$IP" != "$EXTERNALIP" ]]; then
 		echo ""
-		echo "On dirait que ton serveur est derrière un NAT!"
+		echo -e "${CGREEN}On dirait que ton serveur est derrière un NAT!${CEND}"
 		echo ""
-		echo "Si votre serveur est NAT (par exemple un livebox, freebox etc), je dois connaître l'adresse IP externe"
-		echo "Si ce n'est pas le cas, il suffit d'ignorer et de laisser le champ suivant vide"
-		read -p "External IP: " -e USEREXTERNALIP
+		echo -e "${CBLUE}Si votre serveur est NAT (par exemple une livebox, freebox etc), je dois connaître l'adresse IP externe${CEND}"
+		echo -e "${CBLUE}Si ce n'est pas le cas, il suffit d'ignorer et de laisser le champ suivant vide${CEND}"
+		read -p "$(echo -e ${CYELLOW}External IP: ${CEND})" -e USEREXTERNALIP
 		if [[ "$USEREXTERNALIP" != "" ]]; then
 			IP=$USEREXTERNALIP
 		fi
@@ -299,8 +299,8 @@ verb 3" > /etc/openvpn/client-common.txt
 	# Generates the custom client.ovpn
 	newclient "$CLIENT"
 	echo ""
-	echo "Fini!"
+	echo -e "${CGREEN}Fini!${CEND}"
 	echo ""
-	echo "Votre certificat est disponible dans /root/$CLIENT.ovpn"
-	echo "Pour crée des nouveaux/supprimée des certificats, il vous suffit d'exécuter ce script une nouvelle fois!"
+	echo -e "${CBLUE}Votre certificat est disponible dans${CEND} ${CRED}/root/$CLIENT.ovpn${CEND}"
+	echo -e "${CBLUE}Pour crée des nouveaux/supprimée des certificats, il vous suffit d'exécuter ce script une nouvelle fois!${CEND}"
 fi

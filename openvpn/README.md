@@ -21,7 +21,7 @@ chmod +x openvpn-install.sh && ./openvpn-install.sh
 -partie client linux,
 
 
-installer openvpn, récuperé client.ovpn sur le serveur, puis lancé la commande(si ton certificat ce nome client.ovpn)
+installer openvpn, récuperé client.ovpn sur le serveur, puis lancé la commande(si ton certificat ce nomme client.ovpn)
 
 ```
 openvpn client.ovpn

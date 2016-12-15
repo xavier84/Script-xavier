@@ -11,6 +11,8 @@ modifié par Xavier
 
 
 ```
+apt-get install ca-certificates
+
 wget https://raw.githubusercontent.com/xavier84/Script/master/openvpn/openvpn-install.sh
 
 chmod +x openvpn-install.sh && ./openvpn-install.sh

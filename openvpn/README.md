@@ -13,7 +13,7 @@ modifié par Xavier
 ```
 apt-get install ca-certificates
 
-https://raw.githubusercontent.com/xavier84/Script-xavier/master/openvpn/openvpn-install.sh
+wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/openvpn/openvpn-install.sh
 
 chmod +x openvpn-install.sh && ./openvpn-install.sh
 ```

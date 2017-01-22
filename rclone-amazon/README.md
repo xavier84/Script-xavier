@@ -19,8 +19,16 @@ Une fois arrivé sur "Waiting for code..."
 
 ![caps1](https://raw.github.com/xavier84/Script-xavier/master/rclone-amazon/token.PNG)
 
+on vas crée un tunnel dynamic,
+sur windows ouvrir un autre putty :mettre ip + le port de ssh
+puis
+1 aller sur tunnel
+2 mettre le port 7777
+3 choisir dynamic
+4 add pour ajouté le port
 
-
+maintenent clic sur open en bas
+reseigné les infos de connection ssh est cest tout..
 
 
 

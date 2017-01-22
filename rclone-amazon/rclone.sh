@@ -13,8 +13,8 @@ CBLUE="${CSI}1;34m"
 read -p "$(echo -e ${CGREEN}Choix de l\'utilisateur : ${CEND})" TUSER
 # Rclone
 user="$TUSER"
-cloud="cloud"
-enc="Enc"
+cloud="cloud-$user"
+enc="Enc$user"
 encrypted="cloud-encrypted-$user"
 
 

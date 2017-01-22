@@ -19,7 +19,7 @@ encrypted="cloud-encrypted-$user"
 
 
 apt-get install -y fuse expect
-cd /tmp || exit 1
+#cd /tmp || exit 1
 wget http://downloads.rclone.org/rclone-current-linux-amd64.zip
 unzip rclone-current-linux-amd64.zip && cp rclone-*-linux-amd64/rclone /usr/sbin/
 rm rclone-current-linux-amd64.zip && rm -Rf rclone-*-linux-amd64

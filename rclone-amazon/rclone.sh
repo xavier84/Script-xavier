@@ -13,9 +13,9 @@ CBLUE="${CSI}1;34m"
 read -p "$(echo -e ${CGREEN}Choix de l\'utilisateur : ${CEND})" TUSER
 # Rclone
 user="$TUSER"
-cloud="cloud-$user"
-enc="Enc$user"
-encrypted="cloud-encrypted-$user"
+cloud="cloud"
+enc="Enc"
+encrypted="cloud-encrypted"
 
 
 apt-get install -y fuse expect

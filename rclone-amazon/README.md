@@ -39,7 +39,9 @@ reseigné les infos de connection ssh puis laisse la fenetre ouvert.
 ![caps2](https://raw.github.com/xavier84/Script-xavier/master/rclone-amazon/tunnel.PNG)
 
 maintenent ouvrir un navigateur interne, firefox, aller dans option , avance ,reseau , connection parametres
+
 mettre  sur sock 127.0.0.1 port 7777
+
 ![caps3](https://raw.github.com/xavier84/Script-xavier/master/rclone-amazon/socks.PNG)
 
 puis valide, allé sur http://127.0.0.1:53682/auth , mettre son id et mot de passe amazon et autorise rclone

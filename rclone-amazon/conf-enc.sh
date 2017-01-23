@@ -1,7 +1,7 @@
 #!/usr/bin/expect
 #Author: Xavier
 
-set timeout 120
+set timeout 1200
 
 set encrypted [lindex $argv 0]
 

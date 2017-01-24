@@ -27,13 +27,90 @@ chown root:root /usr/sbin/rclone
 chmod 755 /usr/sbin/rclone
 
 #config cloud
-chmod 755 ./conf.sh
-/usr/bin/expect ./conf.sh $cloud
-mkdir /home/$user/cloud
+#chmod 755 ./conf.sh
+#/usr/bin/expect ./conf.sh $cloud
+#mkdir /home/$user/cloud
+/usr/bin/expect <<EOF
+set timeout 1200
+spawn rclone config
+sleep 1
+expect {
+"n) New remote" {send "n\n"}
+}
+expect {
+"name>" {send "$cloud\n"}
+}
+expect {
+"Storage>" {send "1\n"}
+}
+expect {
+"client_id>" {send "\n"}
+}
+expect {
+"client_secret>" {send "\n"}
+}
+expect {
+"Use auto config?" {send "y\n"}
+}
+expect {
+"Yes this is OK" {send "y\n"}
+}
+expect {
+" Edit existing remote" {send "q\n"}
+}
+interact
+EOF
+
 rclone mount $cloud: /home/$user/cloud --allow-other --no-modtime &
 
 #config encryted
-chmod 755 ./conf-enc.sh
-/usr/bin/expect ./conf-enc.sh $encrypted $enc $cloud
-mkdir /home/$user/cloud-encrypted
+#chmod 755 ./conf-enc.sh
+#/usr/bin/expect ./conf-enc.sh $encrypted $enc $cloud
+#mkdir /home/$user/cloud-encrypted
+/usr/bin/expect <<EOD
+set timeout 1200
+spawn rclone config
+sleep 1
+expect {
+"n) New remote" {send "n\n"}
+}
+expect {
+"name>" {send "$encrypted\n"}
+}
+expect {
+"Storage>" {send "5\n"}
+}
+expect {
+"remote>" {send "$cloud:$enc\n"}
+}
+expect {
+"filename_encryption>" {send "2\n"}
+}
+expect {
+"Password or pass phrase for encryption." {send "g\n"}
+}
+expect {
+"Password strength in bits." {send "128\n"}
+}
+expect {
+"Use this password?" {send "y\n"}
+}
+expect {
+"Password or pass phrase for salt. Optional but recommended." {send "g\n"}
+}
+expect {
+"Password strength in bits." {send "128\n"}
+}
+expect {
+"Use this password?" {send "y\n"}
+}
+expect {
+"Yes this is OK" {send "y\n"}
+}
+expect {
+"Current remotes:" {send "q\n"}
+}
+interact
+EOD
+
 rclone mount $encrypted: /home/$user/cloud-encrypted --allow-other --no-modtime &

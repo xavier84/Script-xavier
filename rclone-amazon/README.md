@@ -7,8 +7,7 @@ Attention c'est une version test donc à prendre avec des pincettes!!!
 
 ```
 wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/rclone-amazon/rclone.sh
-wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/rclone-amazon/conf.sh
-wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/rclone-amazon/conf-enc.sh
+
 
 chmod a+x rclone.sh && ./rclone.sh
 ```

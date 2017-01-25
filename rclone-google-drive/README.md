@@ -6,7 +6,7 @@ Attention c'est une version test donc à prendre avec des pincettes!!!
 ## Installation:
 
 ```
-wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/rclone-amazon/rclone.sh
+wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/rclone-google-drive/rclone.sh
 
 
 chmod a+x rclone.sh && ./rclone.sh

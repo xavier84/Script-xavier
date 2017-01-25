@@ -9,6 +9,17 @@ CGREEN="${CSI}1;32m"
 CYELLOW="${CSI}1;33m"
 CBLUE="${CSI}1;34m"
 
+VERSION=$(cat /etc/debian_version)
+
+if [[ "$VERSION" =~ 7.* ]] || [[ "$VERSION" =~ 8.* ]]; then
+	if [ "$(id -u)" -ne 0 ]; then
+		echo -e "${CRED}Ce script doit être exécuté en root${CEND}"
+		exit 1
+	fi
+else
+		echo -e "${CRED}Ce script doit être exécuté sur Debian 7 ou 8 exclusivement.${CEND}"
+		exit 1
+fi
 
 read -p "$(echo -e ${CGREEN}Choix de l\'utilisateur : ${CEND})" TUSER
 # Rclone
@@ -16,7 +27,6 @@ user="$TUSER"
 cloud="google"
 enc="Enc"
 encrypted="google-encrypted"
-
 
 apt-get install -y fuse expect
 #cd /tmp || exit 1

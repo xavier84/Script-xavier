@@ -126,4 +126,7 @@ EOD
 
 rclone copy ./rclone.sh $encrypted:
 rclone mount $encrypted: /home/$user/$encrypted --allow-other --no-modtime &
+
+sleep 5
+rm /home/$user/$cloud/rclone.sh
 rm /home/$user/$encrypted/rclone.sh

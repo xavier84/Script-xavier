@@ -74,7 +74,6 @@ EOF
 
 rclone copy ./rclone.sh $cloud:
 rclone mount $cloud: /home/$user/$cloud --allow-other --no-modtime &
-rm /home/$user/$cloud/rclone.sh
 
 #config encryted
 #chmod 755 ./conf-enc.sh
@@ -129,4 +128,6 @@ EOD
 
 rclone copy ./rclone.sh $encrypted:
 rclone mount $encrypted: /home/$user/$encrypted --allow-other --no-modtime &
+sleep 5
+rm /home/$user/$cloud/rclone.sh
 rm /home/$user/$encrypted/rclone.sh

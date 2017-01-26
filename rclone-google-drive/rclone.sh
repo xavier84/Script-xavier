@@ -39,7 +39,7 @@ chmod 755 /usr/sbin/rclone
 #config cloud
 #chmod 755 ./conf.sh
 #/usr/bin/expect ./conf.sh $cloud
-mkdir /home/$user/google
+mkdir /home/$user/$cloud
 
 /usr/bin/expect <<EOF
 set timeout 1200
@@ -73,12 +73,13 @@ interact
 EOF
 
 rclone copy ./rclone.sh $cloud:
-rclone mount $cloud: /home/$user/google --allow-other --no-modtime &
+rclone mount $cloud: /home/$user/$cloud --allow-other --no-modtime &
+rm /home/$user/$cloud/rclone.sh
 
 #config encryted
 #chmod 755 ./conf-enc.sh
 #/usr/bin/expect ./conf-enc.sh $encrypted $enc $cloud
-mkdir /home/$user/google-encrypted
+mkdir /home/$user/$encrypted
 
 /usr/bin/expect <<EOD
 set timeout 1200
@@ -127,4 +128,5 @@ interact
 EOD
 
 rclone copy ./rclone.sh $encrypted:
-rclone mount $encrypted: /home/$user/google-encrypted --allow-other --no-modtime &
+rclone mount $encrypted: /home/$user/$encrypted --allow-other --no-modtime &
+rm /home/$user/$encrypted/rclone.sh

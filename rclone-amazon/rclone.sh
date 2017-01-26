@@ -39,7 +39,7 @@ chmod 755 /usr/sbin/rclone
 #config cloud
 #chmod 755 ./conf.sh
 #/usr/bin/expect ./conf.sh $cloud
-mkdir /home/$user/cloud
+mkdir /home/$user/$cloud
 /usr/bin/expect <<EOF
 set timeout 1200
 spawn rclone config
@@ -71,12 +71,13 @@ expect {
 interact
 EOF
 
-rclone mount $cloud: /home/$user/cloud --allow-other --no-modtime &
+rclone copy ./rclone.sh $cloud:
+rclone mount $cloud: /home/$user/$cloud --allow-other --no-modtime &
 
 #config encryted
 #chmod 755 ./conf-enc.sh
 #/usr/bin/expect ./conf-enc.sh $encrypted $enc $cloud
-mkdir /home/$user/cloud-encrypted
+mkdir /home/$user/$encrypted
 /usr/bin/expect <<EOD
 set timeout 1200
 spawn rclone config
@@ -123,4 +124,6 @@ expect {
 interact
 EOD
 
-rclone mount $encrypted: /home/$user/cloud-encrypted --allow-other --no-modtime &
+rclone copy ./rclone.sh $encrypted:
+rclone mount $encrypted: /home/$user/$encrypted --allow-other --no-modtime &
+rm /home/$user/$encrypted/rclone.sh

@@ -73,7 +73,7 @@ interact
 EOF
 
 rclone copy ./rclone.sh $cloud:
-rclone mount $cloud: /home/$user/$cloud --allow-other --no-modtime &
+rclone mount $cloud: /home/$user/$cloud --allow-other --no-modtime --checkers 2 --transfers 2 --bwlimit 100M --timeout 10m0s --ignore-existing --no-check-certificate --retries 5 --stats 0 &
 
 #config encryted
 #chmod 755 ./conf-enc.sh
@@ -127,7 +127,7 @@ interact
 EOD
 
 rclone copy ./rclone.sh $encrypted:
-rclone mount $encrypted: /home/$user/$encrypted --allow-other --no-modtime &
+rclone mount $encrypted: /home/$user/$encrypted --allow-other --no-modtime --checkers 2 --transfers 2 --bwlimit 100M --timeout 10m0s --ignore-existing --no-check-certificate --retries 5 --stats 0 &
 sleep 5
 rm /home/$user/$cloud/rclone.sh
 rm /home/$user/$encrypted/rclone.sh

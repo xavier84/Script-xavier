@@ -1,5 +1,26 @@
 #!/bin/bash
 
+
+CSI="\033["
+CEND="${CSI}0m"
+CRED="${CSI}1;31m"
+CGREEN="${CSI}1;32m"
+CYELLOW="${CSI}1;33m"
+CBLUE="${CSI}1;34m"
+
+
+VERSION=$(cat /etc/debian_version)
+
+if [[ "$VERSION" =~ 7.* ]] || [[ "$VERSION" =~ 8.* ]]; then
+	if [ "$(id -u)" -ne 0 ]; then
+		echo -e "${CRED}Ce script doit être exécuté en root${CEND}"
+		exit 1
+	fi
+else
+		echo -e "${CRED}Ce script doit être exécuté sur Debian 7 ou 8 exclusivement.${CEND}"
+		exit 1
+fi
+
 MDPSQL="$(date +%s | sha256sum | base64 | head -c 15)"
 MDPSQLNEXT="$(date +%m | sha256sum | base64 | head -c 15)"
 MDPADMIN="$(date +%h | sha256sum | base64 | head -c 15)"
@@ -9,12 +30,13 @@ NEXTVERSION="nextcloud-$VERSION"
 WWW="/var/www"
 DATA="/var/www/data"
 
+
+read -p "$(echo -e ${CGREEN}Votre sous-domain : ${CEND})" DOMAIN
+
 echo "" > "$LOG"
 echo "Mot de passe root de mysql : $MDPSQL" >> "$LOG"
 echo "Mot de passe bdd nextcloud  : $MDPSQLNEXT" >> "$LOG"
 echo "Acces de votre cloud id : admin mdp : $MDPADMIN" >> "$LOG"
-
-
 chmod 600 "$LOG"
 chown root:root "$LOG"
 
@@ -72,4 +94,4 @@ sudo -u www-data php occ maintenance:install \
 sudo -u www-data php occ config:system:set \
 	trusted_domains 1 \
 	--value="$DOMAIN"
-	
+

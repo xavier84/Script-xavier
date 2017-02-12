@@ -95,7 +95,7 @@ sudo -u www-data php occ config:system:set \
 	trusted_domains 1 \
 	--value="$DOMAIN"
 
-wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/nextcloud/nextcloud.conf -P /etc/nginx/sites-enabled/nextcloud.conf
+wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/nextcloud/nextcloud.conf -P /etc/nginx/sites-enabled/
 sed -i "s|@DOMAIN@|$DOMAIN|g;" /etc/nginx/sites-enabled/nextcloud.conf
 service nginx restart
 

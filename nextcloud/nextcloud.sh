@@ -97,4 +97,5 @@ sudo -u www-data php occ config:system:set \
 
 wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/nextcloud/nextcloud.conf -P /etc/nginx/sites-enabled/nextcloud.conf
 sed -i "s|@DOMAIN@|$DOMAIN|g;" /etc/nginx/sites-enabled/nextcloud.conf
+service nginx restart
 

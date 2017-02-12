@@ -19,7 +19,7 @@ chmod 600 "$LOG"
 chown root:root "$LOG"
 
 
-aptitude install sudo software-properties-common expect unzip -y
+aptitude install sudo software-properties-common expect unzip php5-gd php5-mysql -y
 echo "mysql-server mysql-server/root_password password $MDPSQL" | debconf-set-selections
 echo "mysql-server mysql-server/root_password_again password $MDPSQL" | debconf-set-selections
 aptitude install mysql-server -y

@@ -68,4 +68,8 @@ sudo -u www-data php occ maintenance:install \
 	--database-host "localhost" \
 	--admin-user "admin" \
 	--admin-pass "$MDPADMIN"
+
+sudo -u www-data php occ config:system:set \
+	trusted_domains 1 \
+	--value="$DOMAIN"
 	

@@ -8,8 +8,32 @@ CGREEN="${CSI}1;32m"
 CYELLOW="${CSI}1;33m"
 CBLUE="${CSI}1;34m"
 
-
 VERSION=$(cat /etc/debian_version)
+MDPSQL="$(date +%s | sha256sum | base64 | head -c 15)"
+MDPSQLNEXT="$(date +%m | sha256sum | base64 | head -c 15)"
+MDPADMIN="$(date +%h | sha256sum | base64 | head -c 15)"
+LOG="/root/mdpsql"
+VERSION=$(curl -s https://download.nextcloud.com/server/releases/ | tac | grep unknown.gif | sed 's/.*"nextcloud-\([^"]*\).zip.sha512".*/\1/;q')
+NEXTVERSION="nextcloud-$VERSION"
+WWW="/var/www"
+DATA="/var/www/data"
+TEST="/var/www/rutorrent/histo.log"
+
+
+
+echo -e "${CBLUE}
+                                      |          |_)         _|
+            __ \`__ \   _ \  __ \   _\` |  _ \  _\` | |  _ \   |    __|
+            |   |   | (   | |   | (   |  __/ (   | |  __/   __| |
+           _|  _|  _|\___/ _|  _|\__,_|\___|\__,_|_|\___|_)_|  _|
+
+
+         ____    __   ____  _  _    __    ____  _____  _  _
+        (  _ \  /__\ (_  _)( \/ )  /__\  (  _ \(  _  )( \/ )
+         )   / /(__)\  )(   )  (  /(__)\  ) _ < )(_)(  )  (
+        (_)\_)(__)(__)(__) (_/\_)(__)(__)(____/(_____)(_/\_)
+${CEND}"
+
 
 if [[ "$VERSION" =~ 7.* ]] || [[ "$VERSION" =~ 8.* ]]; then
 	if [ "$(id -u)" -ne 0 ]; then
@@ -21,16 +45,15 @@ else
 		exit 1
 fi
 
-MDPSQL="$(date +%s | sha256sum | base64 | head -c 15)"
-MDPSQLNEXT="$(date +%m | sha256sum | base64 | head -c 15)"
-MDPADMIN="$(date +%h | sha256sum | base64 | head -c 15)"
-LOG="/root/mdpsql"
-VERSION=$(curl -s https://download.nextcloud.com/server/releases/ | tac | grep unknown.gif | sed 's/.*"nextcloud-\([^"]*\).zip.sha512".*/\1/;q')
-NEXTVERSION="nextcloud-$VERSION"
-WWW="/var/www"
-DATA="/var/www/data"
+
+if [ ! -f "$TEST" ]; then
+	echo -e "${CRED}Ce script doit être exécuté sur une installation de Ratxabox ou Bonobox de Ex_rat${CEND}"
+	exit 1
+fi
 
 
+
+echo -e "${CBLUE}Bienvenue sur installation de nextcloud${CEND}"
 read -p "$(echo -e ${CGREEN}Votre sous-domain : ${CEND})" DOMAIN
 
 echo "" > "$LOG"

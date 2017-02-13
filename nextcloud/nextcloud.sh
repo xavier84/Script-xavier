@@ -8,7 +8,7 @@ CGREEN="${CSI}1;32m"
 CYELLOW="${CSI}1;33m"
 CBLUE="${CSI}1;34m"
 
-VERSION=$(cat /etc/debian_version)
+VERSIOND=$(cat /etc/debian_version)
 MDPSQL="$(date +%s | sha256sum | base64 | head -c 15)"
 MDPSQLNEXT="$(date +%m | sha256sum | base64 | head -c 15)"
 MDPADMIN="$(date +%h | sha256sum | base64 | head -c 15)"
@@ -35,7 +35,7 @@ echo -e "${CBLUE}
 ${CEND}"
 
 
-if [[ "$VERSION" =~ 7.* ]] || [[ "$VERSION" =~ 8.* ]]; then
+if [[ "$VERSIOND" =~ 7.* ]] || [[ "$VERSIOND" =~ 8.* ]]; then
 	if [ "$(id -u)" -ne 0 ]; then
 		echo -e "${CRED}Ce script doit être exécuté en root${CEND}"
 		exit 1

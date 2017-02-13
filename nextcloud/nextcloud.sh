@@ -53,13 +53,18 @@ fi
 
 
 
-echo -e "${CBLUE}Bienvenue sur installation de nextcloud${CEND}"
+echo -e "${CYELLOW}Bienvenue sur installation de nextcloud${CEND}"
+echo ""
 read -p "$(echo -e ${CGREEN}Votre sous-domain : ${CEND})" DOMAIN
 
 echo "" > "$LOG"
 echo "Mot de passe root de mysql : $MDPSQL" >> "$LOG"
+echo "" > "$LOG"
 echo "Mot de passe bdd nextcloud  : $MDPSQLNEXT" >> "$LOG"
-echo "Acces de votre cloud id : admin mdp : $MDPADMIN" >> "$LOG"
+echo "" > "$LOG"
+echo "" > "$LOG"
+echo "Acces de votre cloud id : admin  " >> "$LOG"
+echo "Et votre mot de passe cloud : $MDPADMIN" >> "$LOG"
 chmod 600 "$LOG"
 chown root:root "$LOG"
 
@@ -122,3 +127,9 @@ wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/nextcloud/n
 sed -i "s|@DOMAIN@|$DOMAIN|g;" /etc/nginx/sites-enabled/nextcloud.conf
 service nginx restart
 
+
+echo "${CYELLOW}Votre domain: $DOMAIN${CEND}"
+echo "${CYELLOW}Acces de votre cloud id : admin${CEND}"
+echo "${CYELLOW}Et votre mot de passe cloud : $MDPADMIN${CEND}"
+echo ""
+echo "${CRED}Une sauvegarde des mot de passe dans  /root/mdpsql${CEND}"

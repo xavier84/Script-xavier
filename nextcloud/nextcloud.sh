@@ -128,8 +128,8 @@ sed -i "s|@DOMAIN@|$DOMAIN|g;" /etc/nginx/sites-enabled/nextcloud.conf
 service nginx restart
 
 
-echo "${CYELLOW}Votre domain: $DOMAIN${CEND}"
-echo "${CYELLOW}Acces de votre cloud id : admin${CEND}"
-echo "${CYELLOW}Et votre mot de passe cloud : $MDPADMIN${CEND}"
+echo -e "${CYELLOW}Votre domain: $DOMAIN${CEND}"
+echo -e "${CYELLOW}Acces de votre cloud id : admin${CEND}"
+echo -e "${CYELLOW}Et votre mot de passe cloud : $MDPADMIN${CEND}"
 echo ""
-echo "${CRED}Une sauvegarde des mot de passe dans  /root/mdpsql${CEND}"
+echo -e "${CRED}Une sauvegarde des mot de passe dans  /root/mdpsql${CEND}"

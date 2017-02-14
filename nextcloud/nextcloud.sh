@@ -59,10 +59,10 @@ read -p "$(echo -e ${CGREEN}Votre sous-domain : ${CEND})" DOMAIN
 
 echo "" > "$LOG"
 echo "Mot de passe root de mysql : $MDPSQL" >> "$LOG"
-echo "" > "$LOG"
+echo "" >> "$LOG"
 echo "Mot de passe bdd nextcloud  : $MDPSQLNEXT" >> "$LOG"
-echo "" > "$LOG"
-echo "" > "$LOG"
+echo "" >> "$LOG"
+echo "" >> "$LOG"
 echo "Acces de votre cloud id : admin  " >> "$LOG"
 echo "Et votre mot de passe cloud : $MDPADMIN" >> "$LOG"
 chmod 600 "$LOG"

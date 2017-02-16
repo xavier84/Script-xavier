@@ -16,7 +16,7 @@ LOG="/root/mdpsql"
 VERSION=$(curl -s https://download.nextcloud.com/server/releases/ | tac | grep unknown.gif | sed 's/.*"nextcloud-\([^"]*\).zip.sha512".*/\1/;q')
 NEXTVERSION="nextcloud-$VERSION"
 WWW="/var/www"
-DATA="/var/www/data"
+DATA="/var/www/data-nextcloud"
 TEST="/var/www/rutorrent/histo.log"
 
 
@@ -69,7 +69,7 @@ chmod 600 "$LOG"
 chown root:root "$LOG"
 
 
-aptitude install sudo software-properties-common expect unzip php5-gd php5-mysql -y
+aptitude install sudo software-properties-common expect unzip php5-gd php5-mysql php5-apcu -y
 echo "mysql-server mysql-server/root_password password $MDPSQL" | debconf-set-selections
 echo "mysql-server mysql-server/root_password_again password $MDPSQL" | debconf-set-selections
 aptitude install mysql-server -y
@@ -122,6 +122,12 @@ sudo -u www-data php occ maintenance:install \
 sudo -u www-data php occ config:system:set \
 	trusted_domains 1 \
 	--value="$DOMAIN"
+
+echo "env[PATH] = /usr/local/bin:/usr/bin:/bin" >> /etc/php5/fpm/pool.d/www.conf
+sed -i '$d' /var/www/nextcloud/config/config.php
+echo "  'memcache.local' => '\OC\Memcache\APCu'," >> /var/www/nextcloud/config/config.php
+echo ");" >> /var/www/nextcloud/config/config.php
+/etc/init.d/php5-fpm restart
 
 wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/nextcloud/nextcloud.conf -P /etc/nginx/sites-enabled/
 sed -i "s|@DOMAIN@|$DOMAIN|g;" /etc/nginx/sites-enabled/nextcloud.conf

@@ -24,10 +24,13 @@ else
 		apt-get update && apt-get install oracle-java8-installer -y
 	fi
 
-	cd /tmp || exit 1
-	wget http://downloads.sourceforge.net/project/filebot/filebot/FileBot_4.6.1/FileBot_4.6.1-portable.zip
-	unzip FileBot_4.6.1-portable.zip -d filebot && rm -f FileBot_4.6.1-portable.zip
-	mv filebot /home/"$TUSER"/.filebot
+	mkdir /tmp/filebot
+	cd /tmp/filebot/ || exit 1
+	wget https://freefr.dl.sourceforge.net/project/filebot/filebot/FileBot_4.7.9/FileBot_4.7.9-portable.tar.xz
+	tar -xJf FileBot_4.7.9-portable.tar.xz
+	rm FileBot_4.7.9-portable.tar.xz
+	mkdir /home/"$TUSER"/.filebot
+	cp -R ./* /home/"$TUSER"/.filebot/
 	chown -R "$TUSER":"$TUSER" /home/"$TUSER"/.filebot
 	chmod a+x /home/"$TUSER"/.filebot/filebot.sh
 	chmod a+x /home/"$TUSER"/.filebot/update-filebot.sh

@@ -34,7 +34,7 @@ openvpn client.ovpn
 -partie client windows,
 
 
-installer openvpn-install-*-*-*-*x86_64.exe,
+installer openvpn-install-*-*-*-*.exe,
 
 mettre le fichier client.ovpn dans "C:\Program Files\OpenVPN\config"
 

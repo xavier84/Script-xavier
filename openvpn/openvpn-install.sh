@@ -27,7 +27,7 @@ if [[ ! -e /dev/net/tun ]]; then
 fi
 
 
-if [[ "$VERSION" =~ 7.* ]] || [[ "$VERSION" =~ 8.* ]]; then
+if [[ "$VERSION" =~ 7.* ]] || [[ "$VERSION" =~ 8.* ]] || [[ "$VERSION" =~ 9.* ]]; then
 	if [ "$(id -u)" -ne 0 ]; then
 		echo -e "${CRED}Ce script doit être exécuté en root${CEND}"
 		exit 1
@@ -133,7 +133,7 @@ if [[ -e /etc/openvpn/server.conf ]]; then
 					sed -i "/iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT/d" $RCLOCAL
 				fi
 				sed -i '/iptables -t nat -A POSTROUTING -s 10.8.0.0\/24 -j SNAT --to /d' $RCLOCAL
-				apt-get remove --purge -y openvpn openvpn-blacklist
+				apt-get remove --purge -y openvpn
 				rm -rf /etc/openvpn
 				rm -rf /usr/share/doc/openvpn*
 				echo ""
@@ -187,7 +187,7 @@ else
 	fi
 	# Get easy-rsa
 	wget -O ~/EasyRSA-3.0.1.tgz https://github.com/OpenVPN/easy-rsa/releases/download/3.0.1/EasyRSA-3.0.1.tgz
-	tar xzf ~/EasyRSA-3.0.1.tgz -C ~/
+	tar xzfv ~/EasyRSA-3.0.1.tgz -C ~/
 	mv ~/EasyRSA-3.0.1/ /etc/openvpn/
 	mv /etc/openvpn/EasyRSA-3.0.1/ /etc/openvpn/easy-rsa/
 	chown -R root:root /etc/openvpn/easy-rsa/
@@ -241,6 +241,11 @@ crl-verify crl.pem" >> /etc/openvpn/server.conf
 	fi
 	# Avoid an unneeded reboot
 	echo 1 > /proc/sys/net/ipv4/ip_forward
+	if [[  ! -e $RCLOCAL ]]; then
+		echo '#!/bin/sh -e
+exit 0' > $RCLOCAL
+	fi
+	chmod +x $RCLOCAL
 	# Set NAT for the VPN subnet
 	iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -j SNAT --to $IP
 	sed -i "1 a\iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -j SNAT --to $IP" $RCLOCAL

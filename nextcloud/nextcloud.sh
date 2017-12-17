@@ -19,12 +19,12 @@ WWW="/var/www"
 DATA="/var/www/data-nextcloud"
 TEST="/var/www/rutorrent/histo.log"
 
-if [[ "$VERSION" =~ 7.* ]] ||  [[ "$VERSION" =~ 8.* ]]; then
+if [[ "$VERSIOND" =~ 7.* ]] ||  [[ "$VERSION" =~ 8.* ]]; then
 	APT="sudo software-properties-common unzip php5-gd php5-zip php5-mysql php5-apcu"
 	POOL="/etc/php5/fpm/pool.d/www.conf"
 	PHPINI="/etc/php5/fpm/php.ini"
 	PHPSOCK="/var/run/php5-fpm.sock"
-elif [[ "$VERSION" =~ 9.* ]]; then
+elif [[ "$VERSIOND" =~ 9.* ]]; then
 	APT="sudo software-properties-common unzip php7.1-gd php7.1-zip php7.1-mysql php7.1-apcu"
 	POOLE="/etc/php/7.1/fpm/pool.d/www.conf"
 	PHPINI="/etc/php/7.1/fpm/php.ini"
@@ -81,7 +81,7 @@ chmod 600 "$LOG"
 chown root:root "$LOG"
 
 
-aptitude install "$APT" -y
+aptitude install ${APT} -y
 echo "mysql-server mysql-server/root_password password $MDPSQL" | debconf-set-selections
 echo "mysql-server mysql-server/root_password_again password $MDPSQL" | debconf-set-selections
 aptitude install mysql-server -y

@@ -19,7 +19,7 @@ WWW="/var/www"
 DATA="/var/www/data-nextcloud"
 TEST="/var/www/rutorrent/histo.log"
 
-if [[ "$VERSIOND" =~ 7.* ]] ||  [[ "$VERSION" =~ 8.* ]]; then
+if [[ "$VERSIOND" =~ 7.* ]] ||  [[ "$VERSIOND" =~ 8.* ]]; then
 	APT="sudo software-properties-common unzip php5-gd php5-zip php5-mysql php5-apcu"
 	POOL="/etc/php5/fpm/pool.d/www.conf"
 	PHPINI="/etc/php5/fpm/php.ini"

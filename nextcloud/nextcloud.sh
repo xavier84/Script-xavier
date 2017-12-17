@@ -12,12 +12,24 @@ VERSIOND=$(cat /etc/debian_version)
 MDPSQL="$(date +%s | sha256sum | base64 | head -c 15)"
 MDPSQLNEXT="$(date +%m | sha256sum | base64 | head -c 15)"
 MDPADMIN="$(date +%h | sha256sum | base64 | head -c 15)"
-LOG="/root/mdpsql"
+LOG="/root/mdpsql.txt"
 VERSION=$(curl -s https://download.nextcloud.com/server/releases/ | tac | grep unknown.gif | sed 's/.*"nextcloud-\([^"]*\).zip.sha512".*/\1/;q')
 NEXTVERSION="nextcloud-$VERSION"
 WWW="/var/www"
 DATA="/var/www/data-nextcloud"
 TEST="/var/www/rutorrent/histo.log"
+
+if [[ "$VERSION" =~ 7.* ]] ||  [[ "$VERSION" =~ 8.* ]]; then
+	APT="sudo software-properties-common unzip php5-gd php5-zip php5-mysql php5-apcu"
+	POOL="/etc/php5/fpm/pool.d/www.conf"
+	PHPINI="/etc/php5/fpm/php.ini"
+	PHPSOCK="/var/run/php5-fpm.sock"
+elif [[ "$VERSION" =~ 9.* ]]; then
+	APT="sudo software-properties-common unzip php7.1-gd php7.1-zip php7.1-mysql php7.1-apcu"
+	POOLE="/etc/php/7.1/fpm/pool.d/www.conf"
+	PHPINI="/etc/php/7.1/fpm/php.ini"
+	PHPSOCK="/run/php/php7.1-fpm.sock"
+fi
 
 
 
@@ -35,13 +47,13 @@ echo -e "${CBLUE}
 ${CEND}"
 
 
-if [[ "$VERSIOND" =~ 7.* ]] || [[ "$VERSIOND" =~ 8.* ]]; then
+if [[ "$VERSIOND" =~ 7.* ]] || [[ "$VERSIOND" =~ 8.* ]] || [[ "$VERSIOND" =~ 9.* ]]; then
 	if [ "$(id -u)" -ne 0 ]; then
 		echo -e "${CRED}Ce script doit être exécuté en root${CEND}"
 		exit 1
 	fi
 else
-		echo -e "${CRED}Ce script doit être exécuté sur Debian 7 ou 8 exclusivement.${CEND}"
+		echo -e "${CRED}Ce script doit être exécuté sur Debian 7/8/9 exclusivement.${CEND}"
 		exit 1
 fi
 
@@ -69,32 +81,17 @@ chmod 600 "$LOG"
 chown root:root "$LOG"
 
 
-aptitude install sudo software-properties-common expect unzip php5-gd php5-mysql php5-apcu -y
+aptitude install "$APT" -y
 echo "mysql-server mysql-server/root_password password $MDPSQL" | debconf-set-selections
 echo "mysql-server mysql-server/root_password_again password $MDPSQL" | debconf-set-selections
 aptitude install mysql-server -y
 
 
-/usr/bin/expect <<EOD
-set timeout 1200
-spawn mysql -u root -p
-sleep 1
-expect {
-"Enter password:" {send "$MDPSQL\n"}
-}
-expect {
-"mysql>" {send "CREATE DATABASE nextcloud;\n"}
-}
-expect {
-"mysql>" {send "GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud'@'localhost' IDENTIFIED BY '$MDPSQLNEXT';\n"}
-}
-expect {
-"mysql>" {send "FLUSH PRIVILEGES;\n"}
-}
-expect {
-"mysql>" {send "exit;\n"}
-}
-EOD
+mysql -uroot -p"$MDPSQL"<<MYSQL_NEXTCLOUD
+CREATE DATABASE nextcloud;
+GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud'@'localhost' IDENTIFIED BY '$MDPSQLNEXT';
+FLUSH PRIVILEGES;
+MYSQL_NEXTCLOUD
 
 
 wget -v  https://download.nextcloud.com/server/releases/"$NEXTVERSION".zip -P "$WWW"
@@ -123,7 +120,15 @@ sudo -u www-data php occ config:system:set \
 	trusted_domains 1 \
 	--value="$DOMAIN"
 
-echo "env[PATH] = /usr/local/bin:/usr/bin:/bin" >> /etc/php5/fpm/pool.d/www.conf
+echo "env[PATH] = /usr/local/bin:/usr/bin:/bin" >> "$POOL"
+echo "opcache.enable=1" >> "$PHPINI"
+echo "opcache.enable_cli=1" >> "$PHPINI"
+echo "opcache.interned_strings_buffer=8" >> "$PHPINI"
+echo "opcache.max_accelerated_files=10000" >> "$PHPINI"
+echo "opcache.memory_consumption=128" >> "$PHPINI"
+echo "opcache.save_comments=1" >> "$PHPINI"
+echo "opcache.revalidate_freq=1" >> "$PHPINI"
+
 sed -i '$d' /var/www/nextcloud/config/config.php
 echo "  'memcache.local' => '\OC\Memcache\APCu'," >> /var/www/nextcloud/config/config.php
 echo ");" >> /var/www/nextcloud/config/config.php
@@ -131,6 +136,7 @@ echo ");" >> /var/www/nextcloud/config/config.php
 
 wget https://raw.githubusercontent.com/xavier84/Script-xavier/master/nextcloud/nextcloud.conf -P /etc/nginx/sites-enabled/
 sed -i "s|@DOMAIN@|$DOMAIN|g;" /etc/nginx/sites-enabled/nextcloud.conf
+sed -i "s|@PHPSOCK@|$PHPSOCK|g;" /etc/nginx/sites-enabled/nextcloud.conf
 service nginx restart
 
 
@@ -138,4 +144,4 @@ echo -e "${CYELLOW}Votre domain: $DOMAIN${CEND}"
 echo -e "${CYELLOW}Acces de votre cloud id : admin${CEND}"
 echo -e "${CYELLOW}Et votre mot de passe cloud : $MDPADMIN${CEND}"
 echo ""
-echo -e "${CRED}Une sauvegarde des mot de passe dans  /root/mdpsql${CEND}"
+echo -e "${CRED}Une sauvegarde des mots de passe dans $LOG${CEND}"

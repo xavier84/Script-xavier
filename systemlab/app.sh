@@ -22,3 +22,4 @@ chmod +x wp-cli.phar && php wp-cli.phar --info
 php wp-cli.phar core download --locale=fr_FR --force --allow-root
 php wp-cli.phar core config --dbname="$USER"_wp --dbuser="$USER"_wp --dbpass=${PASSWORDSQL} --dbhost=localhost --dbprefix=wp_ --allow-root
 php wp-cli.phar core install --url="${DOMAIN}" --title="systemlab" --admin_user="$USER" --admin_password="${PASSWORD}" --admin_email="$USERMAIL" --allow-root
+chown -R "$USER" ./

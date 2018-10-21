@@ -26,7 +26,7 @@ if [[ "$VERSIOND" =~ 7.* ]] ||  [[ "$VERSIOND" =~ 8.* ]]; then
 	PHPSOCK="/var/run/php5-fpm.sock"
 elif [[ "$VERSIOND" =~ 9.* ]]; then
 	APT="sudo software-properties-common unzip php7.1-gd php7.1-zip php7.1-mysql php7.1-apcu"
-	POOLE="/etc/php/7.1/fpm/pool.d/www.conf"
+	POOL="/etc/php/7.1/fpm/pool.d/www.conf"
 	PHPINI="/etc/php/7.1/fpm/php.ini"
 	PHPSOCK="/run/php/php7.1-fpm.sock"
 fi

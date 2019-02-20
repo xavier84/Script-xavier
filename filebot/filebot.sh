@@ -22,7 +22,7 @@ else
 		echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list
 		echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
 		apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
-		apt-get update && apt-get install oracle-java8-installer -y
+		apt-get update && apt-get install default-jre -y
 	fi
 
 	mkdir /tmp/filebot
@@ -56,7 +56,7 @@ else
 	chmod a+x /home/"$TUSER"/rtorrent-postprocess
 
 	cat <<- EOF >> /home/"$TUSER"/.rtorrent.rc
-	system.method.set_key=event.download.finished,filebot_amc,"execute={/home/$TUSER/rtorrent-postprocess,\$d.get_base_path=,\$d.get_name=,\$d.get_custom1=}"
+	method.set_key = event.download.finished,filebot,"execute2={/home/$TUSER/rtorrent-postprocess,$d.get_base_path=,$d.get_name=,$d.get_custom1=}"
 	EOF
 
 
